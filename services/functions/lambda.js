@@ -7,7 +7,7 @@ const YOUR_LOCAL_CHROMIUM_PATH =
 
 async function setCookie(cookies, page, url) {
   if (cookies) {
-    const cookiesArray = cookies.split(";").map((cookie) => {
+    const cookiesArray = cookies.map((cookie) => {
       const [name, value] = cookie.trim().split("=");
       return { url, name, value };
     });
@@ -19,9 +19,9 @@ export async function handler(event) {
   // const height = event.queryStringParameters.height || 1440;
   // const width = event.queryStringParameters.width || 2560;
   const quote_id = event?.queryStringParameters?.quote_id ?? "";
-  const cookies = event?.headers?.["set-cookie"] ?? null;
+  const cookies = event?.cookies ?? [];
 
-  const height = 608 ?? 1080 ?? 1440;
+  const height = 1080 ?? 1440;
   const width = 1080 ?? 2560;
 
   const launchArgs = {

@@ -1,0 +1,584 @@
+{
+ "Resources": {
+  "CustomResourceHandlerServiceRole41AEC181": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "image-generator"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "local"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/CustomResourceHandler/ServiceRole/Resource"
+   }
+  },
+  "CustomResourceHandlerServiceRoleDefaultPolicy73F93F56": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3:PutObject",
+        "s3:DeleteObject"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:s3:::sstbootstrap-useast124d14e4b-475muyjq57o/*"
+      },
+      {
+       "Action": [
+        "ssm:GetParametersByPath",
+        "ssm:PutParameter"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:ssm:us-east-1:824714483059:parameter/sst/image-generator/local/*",
+        "arn:aws:ssm:us-east-1:824714483059:parameter/sst/image-generator/.fallback/*"
+       ]
+      },
+      {
+       "Action": [
+        "ssm:GetParameter",
+        "ssm:PutParameter",
+        "ssm:DeleteParameter"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:ssm:us-east-1:824714483059:parameter/*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "CustomResourceHandlerServiceRoleDefaultPolicy73F93F56",
+    "Roles": [
+     {
+      "Ref": "CustomResourceHandlerServiceRole41AEC181"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/CustomResourceHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "CustomResourceHandlerE8FB56BA": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-824714483059-us-east-1",
+     "S3Key": "377989a13861b4580168439d6861f200ef9082ee51cb10c5374964c056db8b47.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomResourceHandlerServiceRole41AEC181",
+      "Arn"
+     ]
+    },
+    "Handler": "index.handler",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "image-generator"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "local"
+     }
+    ],
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "CustomResourceHandlerServiceRoleDefaultPolicy73F93F56",
+    "CustomResourceHandlerServiceRole41AEC181"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/CustomResourceHandler/Resource",
+    "aws:asset:path": "asset.377989a13861b4580168439d6861f200ef9082ee51cb10c5374964c056db8b47",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "StackMetadata": {
+   "Type": "Custom::StackMetadata",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomResourceHandlerE8FB56BA",
+      "Arn"
+     ]
+    },
+    "App": "image-generator",
+    "Stage": "local",
+    "Stack": "local-image-generator-MyStack",
+    "SSTVersion": "1.18.4",
+    "BootstrapBucketName": "sstbootstrap-useast124d14e4b-475muyjq57o",
+    "Metadata": [
+     {
+      "id": "api",
+      "addr": "c8e1c20b7f52c1f204741a8bcd032be4be6296b949",
+      "stack": "local-image-generator-MyStack",
+      "type": "Api",
+      "data": {
+       "graphql": false,
+       "url": {
+        "Fn::Join": [
+         "",
+         [
+          "https://",
+          {
+           "Ref": "apiApiC3C473D0"
+          },
+          ".execute-api.us-east-1.",
+          {
+           "Ref": "AWS::URLSuffix"
+          },
+          "/"
+         ]
+        ]
+       },
+       "httpApiId": {
+        "Ref": "apiApiC3C473D0"
+       },
+       "routes": [
+        {
+         "type": "function",
+         "route": "GET /",
+         "fn": {
+          "node": "c8853aeb2e40c7f64a317f67df4c2cf8ec391a81d7",
+          "stack": "local-image-generator-MyStack"
+         }
+        }
+       ]
+      }
+     },
+     {
+      "id": "Lambda_GET_--",
+      "addr": "c8853aeb2e40c7f64a317f67df4c2cf8ec391a81d7",
+      "stack": "local-image-generator-MyStack",
+      "type": "Function",
+      "data": {
+       "localId": "local-image-generator-MyStack-api-Lambda_GET_-",
+       "arn": {
+        "Fn::GetAtt": [
+         "apiLambdaGET2D5CB7A7",
+         "Arn"
+        ]
+       },
+       "secrets": []
+      }
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/StackMetadata/Default"
+   }
+  },
+  "apiApiC3C473D0": {
+   "Type": "AWS::ApiGatewayV2::Api",
+   "Properties": {
+    "CorsConfiguration": {
+     "AllowCredentials": false,
+     "AllowHeaders": [
+      "*"
+     ],
+     "AllowMethods": [
+      "*"
+     ],
+     "AllowOrigins": [
+      "*"
+     ]
+    },
+    "Name": "local-image-generator-api",
+    "ProtocolType": "HTTP",
+    "Tags": {
+     "sst:app": "image-generator",
+     "sst:stage": "local"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Api/Resource"
+   }
+  },
+  "apiApiDefaultStageA626ED4D": {
+   "Type": "AWS::ApiGatewayV2::Stage",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "StageName": "$default",
+    "AccessLogSettings": {
+     "DestinationArn": {
+      "Fn::GetAtt": [
+       "apiLogGroup924E5B7A",
+       "Arn"
+      ]
+     },
+     "Format": "{\"requestTime\":\"$context.requestTime\",\"requestId\":\"$context.requestId\",\"httpMethod\":\"$context.httpMethod\",\"path\":\"$context.path\",\"routeKey\":\"$context.routeKey\",\"status\":$context.status,\"responseLatency\":$context.responseLatency,\"integrationRequestId\":\"$context.integration.requestId\",\"integrationStatus\":\"$context.integration.status\",\"integrationLatency\":\"$context.integration.latency\",\"integrationServiceStatus\":\"$context.integration.integrationStatus\",\"ip\":\"$context.identity.sourceIp\",\"userAgent\":\"$context.identity.userAgent\",\"cognitoIdentityId\":\"$context.identity.cognitoIdentityId\"}"
+    },
+    "AutoDeploy": true,
+    "Tags": {
+     "sst:app": "image-generator",
+     "sst:stage": "local"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Api/DefaultStage/Resource"
+   }
+  },
+  "apiLogGroup924E5B7A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/vendedlogs/apis/local-image-generator-api-",
+       {
+        "Ref": "apiApiC3C473D0"
+       },
+       "/default"
+      ]
+     ]
+    },
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "image-generator"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "local"
+     }
+    ]
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/LogGroup/Resource"
+   }
+  },
+  "apiLambdaGETServiceRole57A117D1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ],
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "image-generator"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "local"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/ServiceRole/Resource"
+   }
+  },
+  "apiLambdaGETServiceRoleDefaultPolicyE9384899": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTraceSegments",
+        "xray:PutTelemetryRecords"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": "s3:*",
+       "Effect": "Allow",
+       "Resource": [
+        "arn:aws:s3:::local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb",
+        "arn:aws:s3:::local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb/*"
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "apiLambdaGETServiceRoleDefaultPolicyE9384899",
+    "Roles": [
+     {
+      "Ref": "apiLambdaGETServiceRole57A117D1"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "apiLambdaGET2D5CB7A7": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-824714483059-us-east-1",
+     "S3Key": "c0a9f72d7cb5c0876e09fc811c668fda40d7e4419689e9d5b4dd8d90a1089f49.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "apiLambdaGETServiceRole57A117D1",
+      "Arn"
+     ]
+    },
+    "Environment": {
+     "Variables": {
+      "SST_DEBUG_SRC_PATH": "services",
+      "SST_DEBUG_SRC_HANDLER": "functions/lambda.handler",
+      "SST_DEBUG_ENDPOINT": "wss://d8o8in2zof.execute-api.us-east-1.amazonaws.com/local",
+      "SST_DEBUG_BUCKET_NAME": "local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb",
+      "SST_FUNCTION_ID": "local-image-generator-MyStack-api-Lambda_GET_-",
+      "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
+      "SST_APP": "image-generator",
+      "SST_STAGE": "local",
+      "SST_DEBUG_IS_API_ROUTE": "1"
+     }
+    },
+    "EphemeralStorage": {
+     "Size": 512
+    },
+    "Handler": "index.main",
+    "MemorySize": 1024,
+    "Runtime": "nodejs16.x",
+    "Tags": [
+     {
+      "Key": "sst:app",
+      "Value": "image-generator"
+     },
+     {
+      "Key": "sst:stage",
+      "Value": "local"
+     }
+    ],
+    "Timeout": 15,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "apiLambdaGETServiceRoleDefaultPolicyE9384899",
+    "apiLambdaGETServiceRole57A117D1"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/Resource",
+    "aws:asset:path": "asset.c0a9f72d7cb5c0876e09fc811c668fda40d7e4419689e9d5b4dd8d90a1089f49.zip",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "apiLambdaGETEventInvokeConfig794FB4BC": {
+   "Type": "AWS::Lambda::EventInvokeConfig",
+   "Properties": {
+    "FunctionName": {
+     "Ref": "apiLambdaGET2D5CB7A7"
+    },
+    "Qualifier": "$LATEST",
+    "MaximumRetryAttempts": 0
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/EventInvokeConfig/Resource"
+   }
+  },
+  "apiRouteGETIntegrationGET451F73F0": {
+   "Type": "AWS::ApiGatewayV2::Integration",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "IntegrationType": "AWS_PROXY",
+    "IntegrationUri": {
+     "Fn::GetAtt": [
+      "apiLambdaGET2D5CB7A7",
+      "Arn"
+     ]
+    },
+    "PayloadFormatVersion": "2.0"
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Route_GET_--/Integration_GET_--/Resource"
+   }
+  },
+  "apiRouteGETIntegrationGETPermission02100559": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "apiLambdaGET2D5CB7A7",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:us-east-1:824714483059:",
+       {
+        "Ref": "apiApiC3C473D0"
+       },
+       "/*/*/"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Route_GET_--/Integration_GET_---Permission"
+   }
+  },
+  "apiRouteGET1A9E87AB": {
+   "Type": "AWS::ApiGatewayV2::Route",
+   "Properties": {
+    "ApiId": {
+     "Ref": "apiApiC3C473D0"
+    },
+    "RouteKey": "GET /",
+    "AuthorizationType": "NONE",
+    "Target": {
+     "Fn::Join": [
+      "",
+      [
+       "integrations/",
+       {
+        "Ref": "apiRouteGETIntegrationGET451F73F0"
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Route_GET_--/Resource"
+   }
+  },
+  "apiParameterurl1D4D90E2": {
+   "Type": "AWS::SSM::Parameter",
+   "Properties": {
+    "Type": "String",
+    "Value": {
+     "Fn::GetAtt": [
+      "apiApiC3C473D0",
+      "ApiEndpoint"
+     ]
+    },
+    "Name": "/sst/image-generator/local/Api/api/url",
+    "Tags": {
+     "sst:app": "image-generator",
+     "sst:stage": "local"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "local-image-generator-MyStack/api/Parameter_url/Resource"
+   }
+  }
+ },
+ "Outputs": {
+  "ApiEndpoint": {
+   "Value": {
+    "Fn::GetAtt": [
+     "apiApiC3C473D0",
+     "ApiEndpoint"
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}
