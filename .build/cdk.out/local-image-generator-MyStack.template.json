@@ -347,14 +347,6 @@
        ],
        "Effect": "Allow",
        "Resource": "*"
-      },
-      {
-       "Action": "s3:*",
-       "Effect": "Allow",
-       "Resource": [
-        "arn:aws:s3:::local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb",
-        "arn:aws:s3:::local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb/*"
-       ]
       }
      ],
      "Version": "2012-10-17"
@@ -375,7 +367,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-824714483059-us-east-1",
-     "S3Key": "c0a9f72d7cb5c0876e09fc811c668fda40d7e4419689e9d5b4dd8d90a1089f49.zip"
+     "S3Key": "00dcb894993fb6976858d8d6e49d4ad9b31a65f27ee199ab2dd8fdbf758d97c9.zip"
     },
     "Role": {
      "Fn::GetAtt": [
@@ -385,21 +377,18 @@
     },
     "Environment": {
      "Variables": {
-      "SST_DEBUG_SRC_PATH": "services",
-      "SST_DEBUG_SRC_HANDLER": "functions/lambda.handler",
-      "SST_DEBUG_ENDPOINT": "wss://d8o8in2zof.execute-api.us-east-1.amazonaws.com/local",
-      "SST_DEBUG_BUCKET_NAME": "local-image-generator-debug-stack-bucket83908e77-1jszzs2fh9azb",
-      "SST_FUNCTION_ID": "local-image-generator-MyStack-api-Lambda_GET_-",
       "AWS_NODEJS_CONNECTION_REUSE_ENABLED": "1",
       "SST_APP": "image-generator",
-      "SST_STAGE": "local",
-      "SST_DEBUG_IS_API_ROUTE": "1"
+      "SST_STAGE": "local"
      }
     },
     "EphemeralStorage": {
      "Size": 512
     },
-    "Handler": "index.main",
+    "Handler": "services/functions/lambda.handler",
+    "Layers": [
+     "arn:aws:lambda:us-east-1:824714483059:layer:chromium_v109:1"
+    ],
     "MemorySize": 1024,
     "Runtime": "nodejs16.x",
     "Tags": [
@@ -423,22 +412,9 @@
    ],
    "Metadata": {
     "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/Resource",
-    "aws:asset:path": "asset.c0a9f72d7cb5c0876e09fc811c668fda40d7e4419689e9d5b4dd8d90a1089f49.zip",
+    "aws:asset:path": "asset.00dcb894993fb6976858d8d6e49d4ad9b31a65f27ee199ab2dd8fdbf758d97c9",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
-   }
-  },
-  "apiLambdaGETEventInvokeConfig794FB4BC": {
-   "Type": "AWS::Lambda::EventInvokeConfig",
-   "Properties": {
-    "FunctionName": {
-     "Ref": "apiLambdaGET2D5CB7A7"
-    },
-    "Qualifier": "$LATEST",
-    "MaximumRetryAttempts": 0
-   },
-   "Metadata": {
-    "aws:cdk:path": "local-image-generator-MyStack/api/Lambda_GET_--/EventInvokeConfig/Resource"
    }
   },
   "apiRouteGETIntegrationGET451F73F0": {

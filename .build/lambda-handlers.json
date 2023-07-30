@@ -1,1 +1,0 @@
-[{"bundle":{"externalModules":["@sparticuz/chromium"]},"handler":"functions/lambda.handler","runtime":"nodejs16.x","srcPath":"services"}]

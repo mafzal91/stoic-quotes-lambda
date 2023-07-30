@@ -27,7 +27,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::824714483059:role/cdk-hnb659fds-deploy-role-824714483059-us-east-1",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::824714483059:role/cdk-hnb659fds-cfn-exec-role-824714483059-us-east-1",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-824714483059-us-east-1/4e038a0c161eef89fbda9984d1d3fcb309c8fcec3f353de8e75d5e582f8faa3e.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-824714483059-us-east-1/d31ac3468d3f022ce83cf4c10f01c2bb61b6343472feb4c337d010af58e4ba43.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -116,12 +116,6 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "apiLambdaGET2D5CB7A7"
-          }
-        ],
-        "/local-image-generator-MyStack/api/Lambda_GET_--/EventInvokeConfig/Resource": [
-          {
-            "type": "aws:cdk:logicalId",
-            "data": "apiLambdaGETEventInvokeConfig794FB4BC"
           }
         ],
         "/local-image-generator-MyStack/api/Route_GET_--/Integration_GET_--/Resource": [
