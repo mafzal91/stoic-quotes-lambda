@@ -1,1 +1,0 @@
-{"id":"local-image-generator-MyStack-api-Lambda_GET_-","handler":"functions/lambda.handler","runtime":"nodejs16.x","srcPath":"services","bundle":{"externalModules":["@sparticuz/chromium"]},"root":"/Users/mohammadafzal/Documents/development/personal/stoic-quotes-lambda"}
