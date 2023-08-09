@@ -1,9 +1,10 @@
 import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
-const URL = "https://stoic-quotes-one.vercel.app";
+const URL = "https://www.stoicsnapshots.com";
+// const URL = "http://localhost:3000";
 const YOUR_LOCAL_CHROMIUM_PATH =
-  "/tmp/localChromium/chromium/mac_arm-1174617/chrome-mac/Chromium.app/Contents/MacOS/Chromium";
+  "/tmp/localChromium/chromium/mac_arm-1186211/chrome-mac/Chromium.app/Contents/MacOS/Chromium";
 
 async function setCookie(cookies, page, url) {
   if (cookies) {
@@ -11,18 +12,25 @@ async function setCookie(cookies, page, url) {
       const [name, value] = cookie.trim().split("=");
       return { url, name, value };
     });
+
     await page.setCookie(...cookiesArray);
   }
 }
 
 export async function handler(event) {
-  // const height = event.queryStringParameters.height || 1440;
-  // const width = event.queryStringParameters.width || 2560;
+  const height = event.queryStringParameters.height || 1440;
+  const width = event.queryStringParameters.width || 2560;
   const quote_id = event?.queryStringParameters?.quote_id ?? "";
   const cookies = event?.cookies ?? [];
 
-  const height = 1080 ?? 1440;
-  const width = 1080 ?? 2560;
+  if (process.env.IS_LOCAL) {
+    console.log({
+      height,
+      width,
+      quote_id,
+      cookies,
+    });
+  }
 
   const launchArgs = {
     args: chromium.args,
@@ -62,7 +70,6 @@ export async function handler(event) {
     isBase64Encoded: true,
     headers: {
       "Content-Type": "image/png",
-      "Content-Disposition": 'attachment; filename="stoic-wisdom.png"',
     },
     body: await page.screenshot({ encoding: "base64" }),
   };
