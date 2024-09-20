@@ -1,31 +1,23 @@
 {
-  "name": "image-generator",
-  "version": "0.0.0",
-  "private": true,
+  "name": "stoic-snapshots-lambda",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "start": "sst start",
-    "build": "sst build",
-    "deploy": "sst deploy",
-    "remove": "sst remove",
-    "console": "sst console",
-    "test": "sst bind -- vitest run"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "sst dev",
+    "remove:dev": "sst remove",
+    "deploy:prod": "sst deploy --stage=production",
+    "remove:prod": "sst remove --stage=production"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@sparticuz/chromium": "^127.0.0",
+    "puppeteer-core": "^23.1.1"
   },
   "devDependencies": {
-    "@serverless-stack/cli": "^1.18.4",
-    "@serverless-stack/resources": "^1.18.4",
-    "@sparticuz/chromium": "^109.0.6",
-    "@tsconfig/node16": "^16.1.0",
-    "aws-cdk-lib": "2.50.0",
-    "install": "^0.13.0",
-    "npm": "^9.8.0",
-    "typescript": "^5.1.6",
-    "vitest": "^0.32.2"
-  },
-  "dependencies": {
-    "@serverless-stack/node": "^1.18.4",
-    "puppeteer-core": "19.4"
-  },
-  "workspaces": [
-    "services"
-  ]
+    "@types/aws-lambda": "8.10.145"
+  }
 }

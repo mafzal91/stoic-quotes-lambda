@@ -2,9 +2,9 @@ import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium";
 
 const URL = "https://www.stoicsnapshots.com";
-// const URL = "http://localhost:3000";
+const LOCAL_URL = "http://localhost:3000";
 const YOUR_LOCAL_CHROMIUM_PATH =
-  "/tmp/localChromium/chromium/mac_arm-1186211/chrome-mac/Chromium.app/Contents/MacOS/Chromium";
+  "/tmp/localChromium/chromium/mac_arm-1357991/chrome-mac/Chromium.app/Contents/MacOS/Chromium";
 
 async function setCookie(cookies, page, url) {
   if (cookies) {
@@ -23,14 +23,14 @@ export async function handler(event) {
   const quote_id = event?.queryStringParameters?.quote_id ?? "";
   const cookies = event?.cookies ?? [];
 
-  if (process.env.IS_LOCAL) {
-    console.log({
-      height,
-      width,
-      quote_id,
-      cookies,
-    });
-  }
+  // if (process.env.IS_LOCAL) {
+  console.log({
+    height,
+    width,
+    quote_id,
+    cookies,
+  });
+  // }
 
   const launchArgs = {
     args: chromium.args,
@@ -43,27 +43,30 @@ export async function handler(event) {
     executablePath: process.env.IS_LOCAL
       ? YOUR_LOCAL_CHROMIUM_PATH
       : await chromium.executablePath(),
-    headless: true,
+    headless: false,
     ignoreHTTPSErrors: true,
     slowMo: 200,
   };
-  const url = `${URL}/${quote_id}`;
+  const url = `${process.env.IS_LOCAL ? LOCAL_URL : URL}/${quote_id}`;
   const browser = await puppeteer.launch(launchArgs);
   const page = await browser.newPage();
   await setCookie(cookies, page, url);
-
+  console.log(url);
   // Navigate to the url
-  await page.goto(url);
+  await page.goto(process.env.IS_LOCAL ? LOCAL_URL : URL);
   await page.waitForNavigation({ waitUntil: "networkidle2" });
 
   let div_selector_to_remove = ".screenshot-hidden";
   await page.evaluate((sel) => {
     const elements = document.querySelectorAll(sel);
-
-    for (let i = 0; i < elements.length; i++) {
-      elements[i].parentNode.removeChild(elements[i]);
-    }
+    elements.forEach((element) => {
+      if (element && element.parentNode) {
+        element.parentNode.removeChild(element);
+      }
+    });
   }, div_selector_to_remove);
+
+  const screenshot = (await page.screenshot({ encoding: "base64" })) as string;
 
   return {
     statusCode: 200,
@@ -71,6 +74,6 @@ export async function handler(event) {
     headers: {
       "Content-Type": "image/png",
     },
-    body: await page.screenshot({ encoding: "base64" }),
+    body: screenshot,
   };
 }
