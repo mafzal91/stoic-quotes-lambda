@@ -23,14 +23,14 @@ export async function handler(event) {
   const quote_id = event?.queryStringParameters?.quote_id ?? "";
   const cookies = event?.cookies ?? [];
 
-  // if (process.env.IS_LOCAL) {
-  console.log({
-    height,
-    width,
-    quote_id,
-    cookies,
-  });
-  // }
+  if (process.env.IS_LOCAL) {
+    console.log({
+      height,
+      width,
+      quote_id,
+      cookies,
+    });
+  }
 
   const launchArgs = {
     args: chromium.args,
@@ -43,7 +43,7 @@ export async function handler(event) {
     executablePath: process.env.IS_LOCAL
       ? YOUR_LOCAL_CHROMIUM_PATH
       : await chromium.executablePath(),
-    headless: false,
+    headless: true,
     ignoreHTTPSErrors: true,
     slowMo: 200,
   };
@@ -51,9 +51,9 @@ export async function handler(event) {
   const browser = await puppeteer.launch(launchArgs);
   const page = await browser.newPage();
   await setCookie(cookies, page, url);
-  console.log(url);
+
   // Navigate to the url
-  await page.goto(process.env.IS_LOCAL ? LOCAL_URL : URL);
+  await page.goto(url);
   await page.waitForNavigation({ waitUntil: "networkidle2" });
 
   let div_selector_to_remove = ".screenshot-hidden";
@@ -67,6 +67,7 @@ export async function handler(event) {
   }, div_selector_to_remove);
 
   const screenshot = (await page.screenshot({ encoding: "base64" })) as string;
+  await browser.close();
 
   return {
     statusCode: 200,
